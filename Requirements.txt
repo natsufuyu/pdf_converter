@@ -60,3 +60,7 @@ urllib3==2.3.0
 watchdog==6.0.0
 xlrd==0.7.1
 xlwt==0.7.2
+streamlit==1.43.0
+pandas==2.2.3
+pdfplumber==0.11.5
+camelot-py[cv]==1.0.0
