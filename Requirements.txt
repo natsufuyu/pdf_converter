@@ -28,7 +28,7 @@ packaging==24.2
 pandas==2.2.3
 pbr==6.1.1
 pdfminer.six==20240706
-pdfplumber==0.11.5
+pdfplumber==0.10.2
 pillow==11.1.0
 pip==23.2.1
 protobuf==5.29.3
