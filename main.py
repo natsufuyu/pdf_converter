@@ -5,7 +5,16 @@ import numpy as np
 import pytesseract
 from pdf2image import convert_from_bytes
 from io import BytesIO
+import subprocess
 
+# Install OpenCV if not already installed
+try:
+    import cv2
+except ModuleNotFoundError:
+    subprocess.run(["pip", "install", "opencv-python-headless"])
+    import cv2  # Try importing again after installation
+
+st.write("OpenCV installed successfully!")
 # Set Tesseract path (if needed, update it to your Tesseract installation path)
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
