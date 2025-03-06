@@ -10,11 +10,11 @@ def extract_text_from_pdf(pdf_file):
     return text
 
 def save_to_csv(data):
-    """Save extracted text as a CSV file"""
+    """Save extracted text as a CSV file (in BytesIO format)"""
     df = pd.DataFrame({"Extracted Data": [data]})
-    output = io.StringIO()
-    df.to_csv(output, index=False)
-    output.seek(0)
+    output = io.BytesIO()  # Convert to BytesIO instead of StringIO
+    df.to_csv(output, index=False, encoding="utf-8")
+    output.seek(0)  # Move cursor to the beginning
     return output
 
 st.title("PDF Table Extractor")
@@ -24,11 +24,13 @@ if uploaded_file:
     extracted_text = extract_text_from_pdf(uploaded_file)
     st.text_area("Extracted Text", extracted_text, height=300)
 
-    # Convert to CSV
+    # Convert to CSV (BytesIO)
     csv_file = save_to_csv(extracted_text)
+
+    # Fix: Use BytesIO format
     st.download_button(
         label="Download as CSV",
-        data=csv_file,
+        data=csv_file.getvalue(),  # Convert BytesIO to binary data
         file_name="extracted_data.csv",
         mime="text/csv",
     )
