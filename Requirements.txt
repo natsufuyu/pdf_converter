@@ -64,4 +64,4 @@ streamlit==1.43.0
 pandas==2.2.3
 pdfplumber
 camelot-py[cv]==1.0.0
-cv2
+opencv-python-headless
