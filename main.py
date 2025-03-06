@@ -2,7 +2,7 @@ import streamlit as st
 import camelot
 import pandas as pd
 import os
-
+os.system("pip install camelot-py ghostscript")
 def pdf_to_excel(pdf_file, output_filename):
     tables = camelot.read_pdf(pdf_file, pages='all', flavor='stream')
     if tables.n > 0:
