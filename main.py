@@ -1,24 +1,35 @@
 import streamlit as st
-import camelot
+import pdfplumber
 import pandas as pd
 import os
-os.system("pip install camelot-py ghostscript")
+
+
 def pdf_to_excel(pdf_file, output_filename):
-    tables = camelot.read_pdf(pdf_file, pages='all', flavor='stream')
-    if tables.n > 0:
-        with pd.ExcelWriter(output_filename, engine='openpyxl') as writer:
-            for i, table in enumerate(tables):
-                table.df.to_excel(writer, sheet_name=f"Sheet{i+1}", index=False)
-        st.success(f"Conversion successful! Excel file saved as {output_filename}")
-        with open(output_filename, "rb") as f:
-            st.download_button(
-                label="Download Excel file",
-                data=f,
-                file_name=output_filename,
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-    else:
-        st.error("No tables found in the PDF.")
+    with pdfplumber.open(pdf_file) as pdf:
+        all_tables = []
+
+        for i, page in enumerate(pdf.pages):
+            tables = page.extract_table()
+            if tables:
+                df = pd.DataFrame(tables[1:], columns=tables[0])  # First row as header
+                all_tables.append(df)
+
+        if all_tables:
+            with pd.ExcelWriter(output_filename, engine='openpyxl') as writer:
+                for i, df in enumerate(all_tables):
+                    df.to_excel(writer, sheet_name=f"Sheet{i + 1}", index=False)
+
+            st.success(f"Conversion successful! Excel file saved as {output_filename}")
+            with open(output_filename, "rb") as f:
+                st.download_button(
+                    label="Download Excel file",
+                    data=f,
+                    file_name=output_filename,
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+        else:
+            st.error("No tables found in the PDF.")
+
 
 st.title("PDF to Excel Converter")
 
