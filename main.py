@@ -1,11 +1,12 @@
 import streamlit as st
 import pandas as pd
-import pdfminer.high_level
+import fitz  # PyMuPDF
 import io
 
 def extract_text_from_pdf(pdf_file):
-    """Extract text from PDF without OpenCV"""
-    text = pdfminer.high_level.extract_text(pdf_file)
+    """Extract text from PDF using PyMuPDF (fitz)"""
+    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
+    text = "\n".join([page.get_text("text") for page in doc])
     return text
 
 def save_to_csv(data):
