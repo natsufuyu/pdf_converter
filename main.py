@@ -1,11 +1,11 @@
 import streamlit as st
-from pdfplumber import open
+import pdfplumber
 import pandas as pd
 import os
 
 
 def pdf_to_excel(pdf_file, output_filename):
-    with open(pdf_file) as pdf:
+    with pdfplumber.open(pdf_file) as pdf:
         all_tables = []
 
         for i, page in enumerate(pdf.pages):
