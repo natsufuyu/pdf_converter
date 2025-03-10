@@ -13,15 +13,28 @@ def parse_table_from_text(text):
     """Attempt to parse table-like text into structured data."""
     lines = text.split('\n')
     table_data = []
-    
+
     for line in lines:
         # Assuming columns are separated by spaces or tabs; adjust the split as needed
-        row = line.split()  
+        row = line.split()
         if len(row) > 1:  # If row has more than one column, consider it part of the table
             table_data.append(row)
     
-    # Convert list of rows into DataFrame
+    # Debug: Check the structure of table_data
     if table_data:
+        print("Table Data (first 5 rows):", table_data[:5])  # Show the first 5 rows for debugging
+        
+        # Ensuring all rows have the same number of columns as the header
+        num_columns = len(table_data[0])  # Get the number of columns from the first row
+        for i, row in enumerate(table_data[1:], start=1):
+            # Pad shorter rows with empty values or truncate longer rows
+            if len(row) < num_columns:
+                row.extend([""] * (num_columns - len(row)))  # Extend row with empty strings
+            elif len(row) > num_columns:
+                row = row[:num_columns]  # Truncate extra columns
+            table_data[i] = row  # Update the row with corrected number of columns
+        
+        # Convert list of rows into DataFrame
         df = pd.DataFrame(table_data[1:], columns=table_data[0])
     else:
         df = pd.DataFrame()  # If no data found, return empty DataFrame
