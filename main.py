@@ -17,7 +17,7 @@ def save_to_csv(data):
     output.seek(0)  # Move cursor to the beginning
     return output
 
-st.title("PDF Table Extractor")
+st.title("Welcome to Wei Jit's PDF Table Extractor")
 
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 if uploaded_file:
